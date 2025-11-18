@@ -1,22 +1,23 @@
 // src/hooks/useGomokuGame.ts
 
 import { useState, useCallback } from 'react';
-// ⬅️ 클래스 이름 및 파일명 변경
-import { Player, GameState, GomokuGame } from '../core/GomokuGame';
+import { GomokuGame, Player, GameState } from '../core/GomokuGame';
 
-// ⬅️ 훅 이름 변경
 export const useGomokuGame = () => {
-    // ⬅️ GomokuGame 클래스 사용
     const [gameInstance, setGameInstance] = useState(() => new GomokuGame());
     
     const [boardState, setBoardState] = useState<Player[][]>(gameInstance.getBoardState());
     const [currentPlayer, setCurrentPlayer] = useState<Player>(gameInstance.getCurrentPlayer());
     const [gameState, setGameState] = useState<GameState>(gameInstance.getGameState());
+    const [lastMove, setLastMove] = useState(gameInstance.getLastMove());
+    const [winLine, setWinLine] = useState(gameInstance.getWinLine());
 
     const updateGameState = useCallback((game: GomokuGame) => {
         setBoardState(game.getBoardState().map(row => [...row])); 
         setCurrentPlayer(game.getCurrentPlayer());
         setGameState(game.getGameState());
+        setLastMove(game.getLastMove()); 
+        setWinLine(game.getWinLine());
     }, []);
 
     const handleHumanMove = useCallback((row: number, col: number) => {
@@ -35,9 +36,18 @@ export const useGomokuGame = () => {
             }
         }
     }, [gameInstance, updateGameState]);
+    
+    // ⏪ Undo 기능
+    const undoMove = useCallback(() => {
+        if (gameInstance.undoMove()) {
+            updateGameState(gameInstance);
+            return true;
+        }
+        return false;
+    }, [gameInstance, updateGameState]);
 
     const restartGame = useCallback(() => {
-        const newGame = new GomokuGame(); // ⬅️ GomokuGame 클래스 사용
+        const newGame = new GomokuGame();
         setGameInstance(newGame);
         updateGameState(newGame);
     }, [updateGameState]);
@@ -48,6 +58,9 @@ export const useGomokuGame = () => {
         gameState,
         handleHumanMove,
         restartGame,
-        boardSize: gameInstance.getBoardSize()
+        boardSize: gameInstance.getBoardSize(),
+        lastMove,
+        winLine,
+        undoMove,
     };
 };

@@ -1,19 +1,15 @@
 // src/App.tsx
-// 이 코드는 모든 컴포넌트와 훅을 통합하여 오목 게임의 메인 레이아웃을 구성하고, 현재 게임 상태(턴, 승패)를 표시하며, 미니멀리즘 스타일을 적용합니다.
+
 import React from 'react';
-// useGomokuGame 훅을 임포트하여 게임 로직 상태를 가져옴
-import { useGomokuGame } from './hooks/useGomokuGame'; 
+import { useGomokuGame } from './hooks/useGomokuGame';
 import Board from './components/Board';
-// GomokuGame 코어 파일에서 Player, GameState 타입을 임포트
 import { Player, GameState } from './core/GomokuGame'; 
 
 const App: React.FC = () => {
-    // 커스텀 훅을 통해 게임 상태와 제어 함수를 가져옴
-    const { boardState, currentPlayer, gameState, handleHumanMove, restartGame, boardSize } = useGomokuGame();
+    const { boardState, currentPlayer, gameState, handleHumanMove, restartGame, boardSize, lastMove, winLine, undoMove } = useGomokuGame();
     
     const isGameOver = gameState !== GameState.Playing;
 
-    // 현재 게임 상태에 따라 메시지 출력
     const getStatusMessage = () => {
         switch (gameState) {
             case GameState.HumanWin: return "🎉 당신의 승리입니다! (흑돌)";
@@ -25,7 +21,7 @@ const App: React.FC = () => {
         }
     };
 
-    // --- 미니멀리즘 스타일 ---
+    // --- 스타일 정의 (미니멀리즘) ---
     const appContainerStyle: React.CSSProperties = { 
         fontFamily: 'sans-serif', 
         maxWidth: '800px', 
@@ -37,7 +33,6 @@ const App: React.FC = () => {
         margin: '20px 0',
         fontSize: '24px',
         fontWeight: 'bold',
-        // 게임 종료 결과에 따라 색상 변경
         color: isGameOver ? (gameState === GameState.HumanWin ? '#28a745' : '#dc3545') : '#333',
     };
     const restartButtonStyle: React.CSSProperties = {
@@ -45,37 +40,53 @@ const App: React.FC = () => {
         fontSize: '16px',
         cursor: 'pointer',
         border: '1px solid #ccc',
-        // 게임 종료 시 버튼 색상 강조
         backgroundColor: isGameOver ? '#007bff' : '#f8f9fa',
         color: isGameOver ? '#fff' : '#333',
         borderRadius: '5px',
-        marginTop: '20px',
         fontWeight: 'bold',
     };
+    const undoButtonStyle: React.CSSProperties = {
+        padding: '8px 15px',
+        fontSize: '14px',
+        cursor: 'pointer',
+        border: '1px solid #ffc107',
+        backgroundColor: '#ffc107',
+        color: '#333',
+        borderRadius: '5px',
+        fontWeight: 'bold',
+        marginLeft: '10px',
+        display: currentPlayer === Player.Human && !isGameOver ? 'inline-block' : 'none',
+    };
+
 
     return (
         <div style={appContainerStyle}>
-            <h1 style={{ fontWeight: 300, letterSpacing: '2px' }}>PVE GOMOKU</h1> 
+            <h1 style={{ fontWeight: 300, letterSpacing: '2px' }}>PVE GOMOKU (업그레이드)</h1> 
             
             <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '20px 0' }}/>
 
-            {/* 상태 표시 */}
             <div style={statusStyle}>
                 {getStatusMessage()}
             </div>
             
-            {/* 게임판 컴포넌트 */}
             <Board 
                 boardState={boardState}
                 boardSize={boardSize}
-                onCellClick={handleHumanMove} // 셀 클릭 시 사람의 움직임 처리
+                onCellClick={handleHumanMove}
                 isGameOver={isGameOver}
+                lastMove={lastMove}
+                winLine={winLine}
             />
 
-            {/* 다시 시작 버튼 */}
-            <button onClick={restartGame} style={restartButtonStyle}>
-                다시 시작하기
-            </button>
+            <div style={{ textAlign: 'center' }}>
+                <button onClick={restartGame} style={restartButtonStyle}>
+                    다시 시작하기
+                </button>
+                
+                <button onClick={undoMove} style={undoButtonStyle}>
+                    ⏪ 되돌리기
+                </button>
+            </div>
             
         </div>
     );

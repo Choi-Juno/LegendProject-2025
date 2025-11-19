@@ -4,6 +4,14 @@ import React from "react";
 import { useGomokuGame } from "./hooks/useGomokuGame";
 import Board from "./components/Board";
 import { Player, GameState } from "./core/GomokuGame";
+// [Refactor] import styled from 'styled-components';
+
+// [Refactor] Styled Components 정의 위치
+// 1. Container = styled.div ...
+// 2. Title = styled.h1 ...
+// 3. StatusMessage = styled.div<{ $isGameOver: boolean; $gameState: GameState }> ...
+// 4. RestartButton = styled.button<{ $isGameOver: boolean }> ...
+// 5. UndoButton = styled.button ...
 
 const App: React.FC = () => {
     const {
@@ -37,6 +45,7 @@ const App: React.FC = () => {
     };
 
     // --- 스타일 정의 (미니멀리즘) ---
+    // [Refactor] 아래 스타일 객체들을 모두 제거하고 Styled Components로 이동
     const appContainerStyle: React.CSSProperties = {
         fontFamily: "sans-serif",
         maxWidth: "800px",
@@ -82,7 +91,9 @@ const App: React.FC = () => {
 
     return (
         <div style={appContainerStyle}>
+            {/* [Refactor] <Container> */}
             <h1 style={{ fontWeight: 300, letterSpacing: "2px" }}>
+                {/* [Refactor] <Title> */}
                 PVE GOMOKU (업그레이드)
             </h1>
 
@@ -95,6 +106,7 @@ const App: React.FC = () => {
             />
 
             <div style={statusStyle}>{getStatusMessage()}</div>
+            {/* [Refactor] <StatusMessage $isGameOver={isGameOver} $gameState={gameState}> */}
 
             <Board
                 boardState={boardState}
@@ -107,11 +119,13 @@ const App: React.FC = () => {
 
             <div style={{ textAlign: "center" }}>
                 <button onClick={restartGame} style={restartButtonStyle}>
+                    {/* [Refactor] <RestartButton $isGameOver={isGameOver} onClick={restartGame}> */}
                     다시 시작하기
                 </button>
 
                 <button onClick={undoMove} style={undoButtonStyle}>
-                    ⏪ 되돌리기
+                    {/* [Refactor] <UndoButton onClick={undoMove}> */}⏪
+                    되돌리기
                 </button>
             </div>
         </div>

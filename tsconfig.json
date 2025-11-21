@@ -1,30 +1,41 @@
-// tsconfig.json (수정된 부분)
 {
   "compilerOptions": {
     "target": "ES2020",
-    "useDefineForClassFields": true,
-    // ⬇️ lib 옵션을 아래와 같이 수정합니다. ⬇️
-    "lib": ["ES2020", "DOM", "DOM.Iterable"], 
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    /* Next.js Specific / Required */
+    "moduleResolution": "node", // Next.js 권장 설정
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    
-    /* 이전 enum 오류 해결을 위해 추가했던 옵션 */
-    // "verbatimModuleSyntax": false, 
-
-    /* Linting */
+    "jsx": "preserve", // Next.js에서는 'preserve'를 사용해야 합니다.
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    /* Linting/Strictness (기존 설정 유지) */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts" // Next.js가 생성하는 타입 정의 파일
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

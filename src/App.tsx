@@ -61,7 +61,7 @@ const App: React.FC = () => {
             ? gameState === GameState.HumanWin
                 ? "#28a745"
                 : "#dc3545"
-            : "#333",
+            : "#d1d1d1",
     };
     const restartButtonStyle: React.CSSProperties = {
         padding: "10px 30px",

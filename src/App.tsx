@@ -1,4 +1,11 @@
 // src/App.tsx
+/**
+ * 메인 애플리케이션 컴포넌트
+ * 
+ * 이 컴포넌트는 오목 게임 애플리케이션의 진입점 역할을 합니다.
+ * 헤더, 게임 보드, 상태 메시지, 제어 버튼을 포함한 게임 레이아웃을 관리합니다.
+ * `useGomokuGame` 훅을 사용하여 게임 로직과 상태를 처리합니다.
+ */
 
 import React from "react";
 import { useGomokuGame } from "./hooks/useGomokuGame";
@@ -7,8 +14,12 @@ import { Player, GameState } from "./core/GomokuGame";
 import styled from 'styled-components';
 import Link from 'next/link';
 
-// --- Styled Components ---
+// --- 스타일된 컴포넌트 ---
 
+/**
+ * 애플리케이션의 메인 컨테이너입니다.
+ * 콘텐츠를 중앙에 배치하고 다크 테마 배경을 적용합니다.
+ */
 const Container = styled.div`
   font-family: 'Inter', sans-serif;
   max-width: 100%;
@@ -56,9 +67,9 @@ const StatusMessage = styled.div<{ $isGameOver: boolean; $gameState: GameState }
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(5px);
   color: ${({ $isGameOver, $gameState }) => {
-        if (!$isGameOver) return '#e0e0e0';
-        return $gameState === GameState.HumanWin ? '#4caf50' : '#f44336';
-    }};
+    if (!$isGameOver) return '#e0e0e0';
+    return $gameState === GameState.HumanWin ? '#4caf50' : '#f44336';
+  }};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 `;
@@ -116,73 +127,82 @@ const HomeLink = styled(Link)`
   }
 `;
 
+/**
+ * App 컴포넌트
+ * 
+ * 메인 게임 UI를 렌더링합니다.
+ */
 const App: React.FC = () => {
-    const {
-        boardState,
-        currentPlayer,
-        gameState,
-        handleHumanMove,
-        restartGame,
-        boardSize,
-        lastMove,
-        winLine,
-        undoMove,
-    } = useGomokuGame();
+  const {
+    boardState,
+    currentPlayer,
+    gameState,
+    handleHumanMove,
+    restartGame,
+    boardSize,
+    lastMove,
+    winLine,
+    undoMove,
+  } = useGomokuGame();
 
-    const isGameOver = gameState !== GameState.Playing;
+  // 게임 종료 여부 확인 (승리 또는 무승부)
+  const isGameOver = gameState !== GameState.Playing;
 
-    const getStatusMessage = () => {
-        switch (gameState) {
-            case GameState.HumanWin:
-                return "🎉 당신의 승리입니다! (흑돌)";
-            case GameState.AIWin:
-                return "😭 AI의 승리입니다. (백돌)";
-            case GameState.Draw:
-                return "🤝 무승부입니다.";
-            case GameState.Playing:
-            default:
-                return currentPlayer === Player.Human
-                    ? "▶️ 당신의 턴입니다 (흑돌)"
-                    : "💻 AI의 턴입니다 (백돌)";
-        }
-    };
+  /**
+   * 현재 게임 상태에 따른 상태 메시지를 반환합니다.
+   */
+  const getStatusMessage = () => {
+    switch (gameState) {
+      case GameState.HumanWin:
+        return "🎉 당신의 승리입니다! (흑돌)";
+      case GameState.AIWin:
+        return "😭 AI의 승리입니다. (백돌)";
+      case GameState.Draw:
+        return "🤝 무승부입니다.";
+      case GameState.Playing:
+      default:
+        return currentPlayer === Player.Human
+          ? "▶️ 당신의 턴입니다 (흑돌)"
+          : "💻 AI의 턴입니다 (백돌)";
+    }
+  };
 
-    return (
-        <Container>
-            <HomeLink href="/">← 메인으로</HomeLink>
+  return (
+    <Container>
+      <HomeLink href="/">← 메인으로</HomeLink>
 
-            <Header>
-                <Title>PVE GOMOKU</Title>
-            </Header>
+      <Header>
+        <Title>PVE GOMOKU</Title>
+      </Header>
 
-            <Divider />
+      <Divider />
 
-            <StatusMessage $isGameOver={isGameOver} $gameState={gameState}>
-                {getStatusMessage()}
-            </StatusMessage>
+      <StatusMessage $isGameOver={isGameOver} $gameState={gameState}>
+        {getStatusMessage()}
+      </StatusMessage>
 
-            <Board
-                boardState={boardState}
-                boardSize={boardSize}
-                onCellClick={handleHumanMove}
-                isGameOver={isGameOver}
-                lastMove={lastMove}
-                winLine={winLine}
-            />
+      <Board
+        boardState={boardState}
+        boardSize={boardSize}
+        onCellClick={handleHumanMove}
+        isGameOver={isGameOver}
+        lastMove={lastMove}
+        winLine={winLine}
+      />
 
-            <ButtonGroup>
-                <Button onClick={restartGame} $primary={isGameOver}>
-                    {isGameOver ? '새 게임 시작' : '다시 시작하기'}
-                </Button>
+      <ButtonGroup>
+        <Button onClick={restartGame} $primary={isGameOver}>
+          {isGameOver ? '새 게임 시작' : '다시 시작하기'}
+        </Button>
 
-                {currentPlayer === Player.Human && !isGameOver && (
-                    <Button onClick={undoMove}>
-                        ⏪ 되돌리기
-                    </Button>
-                )}
-            </ButtonGroup>
-        </Container>
-    );
+        {currentPlayer === Player.Human && !isGameOver && (
+          <Button onClick={undoMove}>
+            ⏪ 되돌리기
+          </Button>
+        )}
+      </ButtonGroup>
+    </Container>
+  );
 };
 
 export default App;

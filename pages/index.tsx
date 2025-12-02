@@ -1,9 +1,17 @@
+// pages/index.tsx
+/**
+ * 홈 페이지 (랜딩 페이지)
+ * 
+ * 게임의 소개와 시작 버튼을 포함하는 메인 화면입니다.
+ * 화려한 애니메이션과 스타일이 적용되어 있습니다.
+ */
+
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import styled, { keyframes } from 'styled-components';
 
-// --- Animations ---
+// --- 애니메이션 정의 ---
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -15,7 +23,7 @@ const pulse = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 `;
 
-// --- Styled Components ---
+// --- 스타일된 컴포넌트 ---
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -100,8 +108,8 @@ const DecorativeStone = styled.div<{ $color: 'black' | 'white'; $top: string; $l
   height: ${props => props.$size};
   border-radius: 50%;
   background: ${props => props.$color === 'black'
-        ? 'radial-gradient(circle at 30% 30%, #444, #000)'
-        : 'radial-gradient(circle at 30% 30%, #fff, #ddd)'};
+    ? 'radial-gradient(circle at 30% 30%, #444, #000)'
+    : 'radial-gradient(circle at 30% 30%, #fff, #ddd)'};
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   opacity: 0.1;
   z-index: 0;
@@ -109,20 +117,20 @@ const DecorativeStone = styled.div<{ $color: 'black' | 'white'; $top: string; $l
 `;
 
 const HomePage: NextPage = () => {
-    return (
-        <MainContainer>
-            <DecorativeStone $color="black" $top="10%" $left="10%" $size="150px" />
-            <DecorativeStone $color="white" $top="70%" $left="80%" $size="200px" />
-            <DecorativeStone $color="black" $top="80%" $left="15%" $size="80px" />
+  return (
+    <MainContainer>
+      <DecorativeStone $color="black" $top="10%" $left="10%" $size="150px" />
+      <DecorativeStone $color="white" $top="70%" $left="80%" $size="200px" />
+      <DecorativeStone $color="black" $top="80%" $left="15%" $size="80px" />
 
-            <Title>LEGEND GOMOKU</Title>
-            <Subtitle>전설의 오목, 지금 시작하세요.</Subtitle>
+      <Title>LEGEND GOMOKU</Title>
+      <Subtitle>전설의 오목, 지금 시작하세요.</Subtitle>
 
-            <StartButton href="/game">
-                게임 시작하기
-            </StartButton>
-        </MainContainer>
-    );
+      <StartButton href="/game">
+        게임 시작하기
+      </StartButton>
+    </MainContainer>
+  );
 };
 
 export default HomePage;

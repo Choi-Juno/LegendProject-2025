@@ -1,4 +1,10 @@
 // src/components/Cell.tsx
+/**
+ * 셀(Cell) 컴포넌트
+ * 
+ * 오목판의 각 칸을 나타냅니다.
+ * 흑돌/백돌을 표시하고, 승리 시 하이라이트 효과나 마지막 착수 표시를 처리합니다.
+ */
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 import { Player } from "../core/GomokuGame";

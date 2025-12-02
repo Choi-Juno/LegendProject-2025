@@ -1,4 +1,10 @@
 // 파일 경로: pages/_document.tsx
+/**
+ * Next.js 커스텀 Document 컴포넌트
+ * 
+ * HTML 문서의 구조(html, head, body)를 커스터마이징합니다.
+ * Styled-components의 서버 사이드 렌더링(SSR) 설정을 포함합니다.
+ */
 
 import Document, {
     Html,

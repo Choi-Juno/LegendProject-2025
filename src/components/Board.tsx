@@ -12,7 +12,7 @@ import Cell from './Cell';
 import styled from 'styled-components';
 import SoundManager from '../core/SoundManager';
 import { Theme, StoneSkinType } from '../styles/theme';
-import { keyframes } from 'styled-components';
+
 
 interface BoardProps {
   boardState: Player[][]; // 현재 보드 상태 (2차원 배열)
